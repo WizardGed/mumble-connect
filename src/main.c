@@ -30,6 +30,18 @@ static const struct option long_opts[] = {
 		.flag = NULL,
 		.val = 'h'
 	},
+	{
+		.name = "connections",
+		.has_arg = required_argument,
+		.flag = NULL,
+		.val = 'n'
+	},
+	{
+		.name = "user",
+		.has_arg = required_argument,
+		.flag = NULL,
+		.val = 'u'
+	},
 	NULL
 };
 
@@ -67,11 +79,11 @@ main_print_help:
 	fprintf(stderr, "Options:\n");
 	fprintf(stderr, "  -h, --help                 "
 			"Displays this help text\n");
+	fprintf(stderr, "  -n, --connections=COUNT    "
+			"The number of connections to make to the mumble server\n");
 	fprintf(stderr, "  -u, --user=USER%           "
 			"The username to connect with. Pound signs get substituted with a number "
 			"based on how many connections are made\n");
-	fprintf(stderr, "  -n, --connections=COUNT    "
-			"The number of connections to make to the mumble server\n");
 main_cleanup:
 	return main_ret;
 }
