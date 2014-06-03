@@ -18,9 +18,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
 #include <unistd.h>
 #include <getopt.h>
+
+static const int default_connections = 1;
+static const char default_user[] = "MC#";
 
 static const char opts[] = "hn:u:";
 static const struct option long_opts[] = {
@@ -48,12 +50,20 @@ static const struct option long_opts[] = {
 int main(int argc, char *argv[])
 {
 	int opt_ret, main_ret = EXIT_FAILURE;
+	int connections = default_connections;
+	const char *user = default_user;
 
 	while ((opt_ret = getopt_long(argc, argv, opts, long_opts, NULL)) != -1) {
 		switch (opt_ret) {
 			case 'u':
+				user = optarg;
 				break;
 			case 'n':
+				connections = atoi(optarg);
+				if (connections < 1) {
+					fprintf(stderr, "The number of connections must be positive\n\n");
+					goto main_print_help;
+				}
 				break;
 			case 'h':
 			default:
@@ -63,6 +73,18 @@ int main(int argc, char *argv[])
 	argv += optind;
 	argc -= optind;
 
+	// We must have a username containing # when dealing with multiple conns
+	if (connections > 1) {
+		size_t i = 0;
+		for (; user[i] != 0 && user[i] != '#'; ++i);
+		if (user[i] == 0) {
+			fprintf(stderr, "The username must contain a pound sign when "
+					"performing multiple connections\n\n");
+			goto main_print_help;
+		}
+	}
+
+	// We require a hostname for the mumble server
 	if (argc != 1) {
 		fprintf(stderr, "You must pass a single hostname to connect\n\n");
 		goto main_print_help;
