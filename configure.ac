@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-AC_PREREQ([2.64])
+AC_PREREQ([2.60])
 AC_INIT([mumble-connect],
 		[0.1.0],
 		[https://github.com/wkennington/mumble-connect],
